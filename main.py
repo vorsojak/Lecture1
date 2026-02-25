@@ -34,7 +34,7 @@ class Prodotto:
     def price(self): # eq. getter
         return self._price
     @price.setter
-    def price(self, valore):
+    def price(self, valore): #eq. setter
         if valore < 0:
             raise ValueError("Attenzione, il prezzo non può essere negativo.")
         self._price = valore
@@ -74,7 +74,6 @@ class Cliente:
     @property
     def categoria(self):
         return self._categoria
-
     @categoria.setter
     def categoria(self, categoria):
         categorie_valide = {"Gold", "Silver", "Bronze"}
@@ -87,5 +86,5 @@ class Cliente:
         return f"Cliente {self.nome} ({self.categoria}) - {self.mail}"
 
 c1 = Cliente("Mario Bianchi", "mario.bianchi@polito.it", "Gold")
-c2 = Cliente("Carlo Masone", "carlo.masone@polito.it", "Platinum")
+#c2 = Cliente("Carlo Masone", "carlo.masone@polito.it", "Platinum")   #cliente con categoria non ammessa che scatena l'eccezione
 print(c1.descrizione())
