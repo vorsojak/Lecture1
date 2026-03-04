@@ -5,6 +5,7 @@ class Prodotto:
     aliquota_iva = 0.22 #variabile di classe -- ovvero è la stessa per tutte le istanze che verranno create.
 
     def __init__(self, name: str, price: float, quantity: int, supplier = None):
+        self.prezzo_unitario = None
         self.name = name
         self._price = None
         self.price = price
@@ -94,6 +95,7 @@ class Abbonamento:
 class ProdottoRecord:
     name: str
     prezzo_unitario: float
+    quantity: int
 
 MAX_QUANTITA = 1000
 

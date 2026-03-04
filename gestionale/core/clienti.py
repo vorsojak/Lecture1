@@ -30,6 +30,9 @@ class Cliente:
         # "Cliente Fulvio Bianchi (Gold) - fulvio@google.com"
         return f"Cliente {self.nome} ({self.categoria}) - {self.mail}"
 
+    def __str__(self):
+        return f"{self.nome}, {self.mail}"
+
 @dataclass
 class ClienteRecord:
     name: str

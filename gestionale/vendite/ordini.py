@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from gestionale.core.clienti import ClienteRecord
-from gestionale.core.prodotti import ProdottoRecord
+from gestionale.core.clienti import Cliente
+from gestionale.core.prodotti import Prodotto, ProdottoRecord
 
 
 @dataclass
@@ -15,7 +15,7 @@ class RigaOrdine:
 @dataclass
 class Ordine:
     righe: list[RigaOrdine]
-    cliente: ClienteRecord
+    cliente: Cliente
 
     def totale_netto(self):
         return sum(r.totale_riga() for r in self.righe)

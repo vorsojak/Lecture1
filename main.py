@@ -6,6 +6,8 @@
 from gestionale.vendite.ordini import Ordine, RigaOrdine, OrdineConSconto
 from gestionale.core.prodotti import Prodotto, crea_prodotto_standard, ProdottoRecord
 from gestionale.core.clienti import Cliente, ClienteRecord
+import networkx as fix
+import flet
 
 print("========================")
 p1 = Prodotto("Ebook reader", 120, 1, "AAA")
