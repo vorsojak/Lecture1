@@ -99,3 +99,48 @@ s1.issuperset(s)
 s1.isdisjoint(s)
 
 #DIZIONARIO
+catalogo = {
+    "LAP001": p1,
+    "LAP002": ProdottoRecord("Laptop",1500,1),
+    "MAU001": p2,
+    "AUR001": p3
+}
+
+cod = "LAP001"
+prod = catalogo[cod]
+print(f"Il prodotto con codice {cod} è {prod}")
+print(f"Cerco un altro oggetto: {catalogo.get("PrdotottoInesistente")}") #restituisce None
+
+prod2 = catalogo.get("sdvsd", ProdottoRecord("Sconosciuto",0,1))
+print(prod2)
+
+keys = catalogo.keys()
+valori = catalogo.values() #restituiscono un oggetto setlike
+
+for k in keys:
+    print(k)
+for v in valori:
+    print(v)
+for k, v in catalogo.items():
+    print(f"Codice: {k} - Prodotto: {v}")
+
+rimosso = catalogo.pop("LAP002")
+print(rimosso)
+
+#dict comprehension
+prezzi = {codice: prod.prezzo_unitario for codice,prod in catalogo.items()}
+
+"""Esercizio
+   Per ognuno dei seguenti casi decidere quale struttura usare.
+1) Memorizzare un elenco di ordini che dovranno essere processati in ordine di arrivo
+2) Memorizzare i CF dei clienti univoci
+3) Creare un database di prodotti che posso cercare con un codice univoco
+4) Memorizzare le coordinate GPS della nuova sede di roma
+5) Tenere traccia delle categorie di clienti che hanno fatto un ordine in un certo range temporale
+"""
+ordini = [] #lista
+elencoCF = set() #set
+prodotti = {} #dizionario
+coordinate_roma = () #tupla
+categorie = {"Gold", "Silver", "Bronze"} #set
+
