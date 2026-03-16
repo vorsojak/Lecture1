@@ -39,10 +39,16 @@ class ClienteRecord:
     mail: str
     categoria: str
 
+    def __str__(self):
+        return f"{self.name} -- {self.mail}, {self.categoria}"
+
 def test_modulo():
     c1 = Cliente("Mario Bianchi", "mario.bianchi@polito.it", "Gold")
     #c2 = Cliente("Carlo Masone", "carlo.masone@polito.it", "Platinum") #cliente con categoria non ammessa che scatena l'eccezione
     print(c1.descrizione())
+
+
+
 
 if __name__=="__main__":
     test_modulo()

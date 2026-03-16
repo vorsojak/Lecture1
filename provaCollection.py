@@ -1,6 +1,9 @@
 import copy
+from collections import Counter, deque
 
+from gestionale.core.clienti import ClienteRecord
 from gestionale.core.prodotti import ProdottoRecord
+from gestionale.vendite.ordini import Ordine, RigaOrdine
 
 p1 = ProdottoRecord("Laptop", 1200,1)
 p2 = ProdottoRecord("Mouse",20,1)
@@ -142,5 +145,102 @@ ordini = [] #lista
 elencoCF = set() #set
 prodotti = {} #dizionario
 coordinate_roma = () #tupla
-categorie = {"Gold", "Silver", "Bronze"} #set
+categoriee = {"Gold", "Silver", "Bronze"} #set
+
+ordini_da_processare = []
+o1 = Ordine([], ClienteRecord("Mario Rossi", "mario@polito.it", "Gold"))
+o2 = Ordine([], ClienteRecord("Mario Bianchi", "bianchi@polito.it", "Silver"))
+o3 = Ordine([], ClienteRecord("Fulvio Rossi", "fulvio@polito.it", "Bronze"))
+o4 = Ordine([], ClienteRecord("Carlo Masone", "carlo@polito.it", "Gold"))
+
+ordini_da_processare.append((o1, 0))
+ordini_da_processare.append((o2, 10))
+ordini_da_processare.append((o3, 3))
+ordini_da_processare.append((o4, 45))
+
+codici_fiscali = {"ajnfkefioe231", "ajnsow241", "njknaskm1094", "ajnsow241"}
+print(codici_fiscali)
+
+listino_prodotti = {"LAP0001" : ProdottoRecord("Laptop", 1200.0,1),
+                    "KEY001" : ProdottoRecord("Keyboard", 20.0,1)}
+
+magazzino_roma = (45, 6)
+
+categorie_periodo = set()
+categorie_periodo.add("Gold")
+categorie_periodo.add("Bronze")
+
+print("=============================Counter=============================")
+#COUNTER
+lista_clienti = [
+    ClienteRecord("Mario Rossi", "mario@polito.it", "Gold"),
+    ClienteRecord("Mario Bianchi", "bianchi@polito.it", "Silver"),
+    ClienteRecord("Fulvio Rossi", "fulvio@polito.it", "Bronze"),
+    ClienteRecord("Carlo Masone", "carlo@polito.it", "Gold"),
+    ClienteRecord("Mario Bianchi", "mario@polito.it", "Gold"),
+    ClienteRecord("Giuseppe Averta", "bianchi@polito.it", "Silver"),
+    ClienteRecord("Francesca Pistilli", "fulvio@polito.it", "Bronze"),
+    ClienteRecord("Carlo Masone", "carlo@polito.it", "Gold"),
+    ClienteRecord("Fulvio Corno", "carlo@polito.it", "Silver")
+]
+
+categorie = [c.categoria for c in lista_clienti]
+categorie_counter = Counter(categorie)
+
+print("Distribuzione categorie clienti")
+print(categorie_counter)
+
+print("2 Categorie più frequent1")
+print(categorie_counter.most_common(2))
+
+print("totale:")
+print(categorie_counter.total())
+
+vendite_gennaio = Counter(
+    {"Laptop": 13, "Tablet": 15}
+)
+
+vendite_febbraio = Counter(
+    {"Laptop": 3, "Stampante": 1}
+)
+
+vendite_bimestre = vendite_gennaio+vendite_febbraio
+
+#Aggregare informazione
+print(f"Vendite Gennaio: {vendite_gennaio}")
+print(f"Vendite Febbraio: {vendite_febbraio}")
+print(f"Vendite bimestre: {vendite_bimestre}")
+
+# Fare la differenza
+print(f"Differenza di vendite: {vendite_gennaio-vendite_febbraio}")
+
+
+#modificare i valore in the fly
+
+vendite_gennaio["Laptop"] += 4
+print(f"Vendite Gennaio: {vendite_gennaio}")
+
+# metodi da ricordare
+# c.most_common(n) #restituisce gli n elementi più frequenti
+# c.total() # somma dei conteggi
+
+#Defaultdicts
+
+
+#deque
+coda_ordini = deque()
+for i in range(1,10):
+    cliente = ClienteRecord(f"Cliente {i}: ", f"cliente{i}@polito.it","Gold")
+    prodotto = ProdottoRecord(f"Prodotto{i}",100,1)
+    ordine = Ordine([RigaOrdine(prodotto,1),cliente],cliente)
+    coda_ordini.append(ordine)
+
+print(f"Ordini in coda: {len(coda_ordini)}")
+
+
+while coda_ordini:
+    ordine_corrente = coda_ordini.popleft()
+    print("Sto gestendo l'ordine: ", ordine_corrente)
+
+
 
