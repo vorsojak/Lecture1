@@ -23,7 +23,11 @@ class GestoreOrdine:
         self._ordini_da_processare.append(ordine)
         print(f"Ricevuto un nuovo ordine da parte di {ordine.cliente}")
         print(f"ordini ancora da evadere: {len(self._ordini_da_processare)}")
-
+    
+    def crea_ordine(self, nomeP: str, prezzo: float, quantita: int, nomeC: str, mail: str, categoria: str):
+        return Ordine([RigaOrdine(ProdottoRecord(nomeP, prezzo, 1), quantita)],
+                      ClienteRecord(nomeC, mail, categoria))
+        
     def processa_prossimo_ordine(self):
         """Legge il prossimo ordine in coda e lo gestisce"""
 
@@ -131,24 +135,5 @@ if __name__=="__main__":
     test_modulo()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def crea_ordine():
+    return None
