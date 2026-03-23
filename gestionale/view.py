@@ -51,3 +51,31 @@ class View:
 
     def update_page(self):
         self._page.update()
+
+    @property
+    def NomeProdotto(self):
+        return self._NomeProdotto
+
+    @property
+    def Prezzo(self):
+        return self._Prezzo
+
+    @property
+    def Quantita(self):
+        return self._Quantita
+
+    @property
+    def NomeCliente(self):
+        return self._NomeCliente
+
+    @property
+    def Mail(self):
+        return self._Mail
+
+    @property
+    def Categoria(self):
+        return self._Categoria
+
+    @property
+    def lvOut(self):
+        return self._lvOut
