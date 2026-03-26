@@ -1,12 +1,13 @@
-#file gestionale con le seguenti funzionalita:
+#file gestionale con le seguenti funzionalità:
 #supportare l'arrivo e la gestione di ordini
-#quando ariva un nuovo ordine lo aggiungo alla coda, assicurandomi che sia eseguito solo dopo gli altri
-#fornire statistiche sulla distribuzione di ordine per categpria di clienti
-
+#quando arriva un nuovo ordine lo aggiungo alla coda, assicurandomi che sia eseguito solo dopo gli altri
+#fornire statistiche sulla distribuzione di ordine per categoria di clienti
+import random
 from collections import deque, Counter, defaultdict
 
-from gestionale.core.clienti import ClienteRecord
-from gestionale.core.prodotti import ProdottoRecord
+from dao.dao import DAO
+from gestionale.core.cliente import ClienteRecord
+from gestionale.core.prodotto import ProdottoRecord
 from gestionale.vendite.ordini import Ordine, RigaOrdine
 
 
@@ -16,18 +17,55 @@ class GestoreOrdine:
         self._ordini_da_processare = deque()
         self._ordini_processati = []
         self._statistiche_prodotti = Counter()
-        self._ordini_per_cstegoria = defaultdict(list)
+        self._ordini_per_categoria = defaultdict(list)
+        self._dao = DAO()
+        self._allP = []
+        self._allC = []
+        self._fill_data()
+
+    def crea_ordine(self, nomeP: str, prezzo: float, quantita: int,
+                    nomeC: str, mail: str, categoria: str):
+
+        prod = ProdottoRecord(nomeP, prezzo, quantita)
+        cliente = ClienteRecord(nomeC, mail, categoria)
+        self.update_DB(prod, cliente)
+        return Ordine([RigaOrdine(prod, quantita)],
+                      cliente)
+
+
+    def update_DB(self, prod, cliente):
+        if not self._dao.hasProdotto(prod):
+            self._dao.add_prodotto(prod)
+
+        if not self._dao.hasCliente(cliente):
+            self._dao.add_cliente(cliente)
+
+    def _fill_data(self):
+        """Leggo prodotti e clienti dal db e creo ordini randomici per testare l'app"""
+        self._allP.extend(self._dao.getAllProdotti())
+        self._allC.extend(self._dao.getAllClienti())
+        for i in range(10):
+            indexP = random.randint(0, len(self._allP)-1)
+            indexC = random.randint(0, len(self._allC)-1)
+            ordine = Ordine([RigaOrdine(self._allP[indexP], random.randint(1,5))
+                ], self._allC[indexC])
+            self.add_ordine(ordine)
+
+    def add_prodotto(self, nome, prezzo, quantita):
+        prodotto = ProdottoRecord(nome,prezzo,quantita)
+        print(prodotto)
+        self._dao.add_prodotto(prodotto)
+
+    def add_cliente(self, nome, mail, categoria):
+        cliente = ClienteRecord(nome, mail, categoria)
+        self._dao.add_cliente(cliente)
 
     def add_ordine(self, ordine: Ordine):
         """Aggiunge un nuovo ordine a quelli da gestire"""
         self._ordini_da_processare.append(ordine)
         print(f"Ricevuto un nuovo ordine da parte di {ordine.cliente}")
         print(f"ordini ancora da evadere: {len(self._ordini_da_processare)}")
-    
-    def crea_ordine(self, nomeP: str, prezzo: float, quantita: int, nomeC: str, mail: str, categoria: str):
-        return Ordine([RigaOrdine(ProdottoRecord(nomeP, prezzo, 1), quantita)],
-                      ClienteRecord(nomeC, mail, categoria))
-        
+
     def processa_prossimo_ordine(self):
         """Legge il prossimo ordine in coda e lo gestisce"""
 
@@ -37,15 +75,15 @@ class GestoreOrdine:
             return False, Ordine([], ClienteRecord("","",""))
 
         ordine =self._ordini_da_processare.popleft()
-        print(f"Sto procesando l'ordine da parte di {ordine.cliente}")
+        print(f"Sto processando l'ordine da parte di {ordine.cliente}")
         print(ordine.riepilogo())
 
-        #aggiornare statistiche sui prodotti vwenduti
+        #aggiornare statistiche sui prodotti venduti
         for riga in ordine.righe:
             self._statistiche_prodotti[riga.prodotto.name] += riga.quantita
 
         #raggruppare gli ordini per categoria
-        self._ordini_per_cstegoria[ordine.cliente.categoria].append(ordine)
+        self._ordini_per_categoria[ordine.cliente.categoria].append(ordine)
 
         #ordine processato
         self._ordini_processati.append(ordine)
@@ -73,9 +111,9 @@ class GestoreOrdine:
     def get_distribuzione_categorie(self):
         """Restituisce info su totale fatturato per ogni categoria presente"""
         valori = []
-        for cat in self._ordini_per_cstegoria.keys():
-            ordini = self._ordini_per_cstegoria[cat]
-            totale_fatturato = sum( [o.totale_ordine(0.22) for o in ordini])
+        for cat in self._ordini_per_categoria.keys():
+            ordini = self._ordini_per_categoria[cat]
+            totale_fatturato = sum( [o.totale_lordo(0.22) for o in ordini])
             valori.append((cat, totale_fatturato))
         return valori
 
@@ -104,11 +142,11 @@ class GestoreOrdine:
 
         sommario+= "\nProdotti più venduti:"
         for prod, quantita in self.get_statistiche_prodotti():
-            sommario+= f"{prod}: {quantita}"
+            sommario+= f"\n-{prod}: {quantita}"
 
         sommario+= "\nFatturato per categoria"
-        for valori in self.get_statistiche_prodotti():
-            sommario+= f"{valori[0]}: {valori[1]}"
+        for cat, fatturato in self.get_distribuzione_categorie():
+            sommario+= f"\n-{cat}: {fatturato}"
         sommario += "\n=============================="
         return sommario
 
@@ -147,7 +185,3 @@ def test_modulo():
 
 if __name__=="__main__":
     test_modulo()
-
-
-def crea_ordine():
-    return None

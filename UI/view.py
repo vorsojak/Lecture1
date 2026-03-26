@@ -20,16 +20,19 @@ class View:
         self._NomeProdotto = ft.TextField(label="Nome del prodotto", width=200)
         self._Prezzo = ft.TextField(label="Prezzo del prodotto", width=200)
         self._Quantita = ft.TextField(label="Quantita del prodotto", width=200)
+        self._btnAddProdotto = ft.ElevatedButton(content="Aggiungi prodotto al db", on_click=self._controller.aggiungiProdotto, width=250)
 
-        row1 = ft.Row(controls = [self._NomeProdotto, self._Prezzo, self._Quantita],
+
+        row1 = ft.Row(controls = [self._NomeProdotto, self._Prezzo, self._Quantita, self._btnAddProdotto],
                       alignment=ft.MainAxisAlignment.CENTER)
 
         # Cliente
         self._NomeCliente = ft.TextField(label="Nome del cliente", width=200)
         self._Mail = ft.TextField(label="Mail del cliente", width=200)
         self._Categoria = ft.TextField(label="Categoria del cliente", width=200)
+        self._btnAddCliente = ft.ElevatedButton(content="Aggiungi cliente al db", on_click=self._controller.aggiungiCliente, width=250)
 
-        row2 = ft.Row(controls=[self._NomeCliente, self._Mail, self._Categoria],
+        row2 = ft.Row(controls=[self._NomeCliente, self._Mail, self._Categoria, self._btnAddCliente],
                       alignment=ft.MainAxisAlignment.CENTER)
 
         # Buttons

@@ -10,6 +10,10 @@ class Controller:
     def addOrdine(self, e):
         nomeP = self._view.NomeProdotto.value
         if nomeP == "":
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione! Il campo nome prodotto non può essere vuoto", color="red")
+            )
+            self._view.update_page()
             return
         try:
             prezzoP = float(self._view.Prezzo.value)
@@ -31,19 +35,23 @@ class Controller:
         nomeC = self._view.NomeCliente.value
         if nomeC == "":
             self._view.lvOut.controls.append(
-                ft.Text("Attenzione! Il campo nome Cliente non può essere vuoto")
+                ft.Text("Attenzione! Il campo nome cliente non può essere vuoto", color="red")
             )
             self._view.update_page()
             return
         mailC = self._view.Mail.value
         if mailC == "":
             self._view.lvOut.controls.append(
-                ft.Text("Attenzione! Il campo mail Cliente non può essere vuoto")
+                ft.Text("Attenzione! Il campo mail cliente non può essere vuoto", color="red")
             )
             self._view.update_page()
             return
         categoriaC = self._view.Categoria.value
         if categoriaC == "":
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione! Il campo categoria cliente non può essere vuoto", color="red")
+            )
+            self._view.update_page()
             return
 
         ordine = self._model.crea_ordine(nomeP, prezzoP, quantitaP, nomeC, mailC, categoriaC)
@@ -104,7 +112,6 @@ class Controller:
             self._view.update_page()
             return
 
-
     def stampaSommario(self):
         self._view.lvOut.controls.clear()
         self._view.lvOut.controls.append(
@@ -116,3 +123,61 @@ class Controller:
         self._view.update_page()
         return
 
+    def aggiungiProdotto(self):
+        nomeP = self._view.NomeProdotto.value
+        if nomeP == "":
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione! Il campo nome prodotto non può essere vuoto", color="red")
+            )
+            self._view.update_page()
+            return
+        try:
+            prezzoP = float(self._view.Prezzo.value)
+        except ValueError:
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione, il prezzo deve essere un numero", color="red")
+            )
+            self._view.update_page()
+            return
+        try:
+            quantitaP = int(self._view.Quantita.value)
+        except ValueError:
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione, la quantità deve essere un numero intero", color="red")
+            )
+            self._view.update_page()
+            return
+        self._model.add_prodotto(nomeP, prezzoP, quantitaP)
+        self._view.lvOut.controls.append(
+            ft.Text("Prdotto aggiunto correttamente al database.", color="green")
+        )
+        self._view.update_page()
+
+    def aggiungiCliente(self):
+        nomeC = self._view.NomeCliente.value
+        if nomeC == "":
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione! Il campo nome cliente non può essere vuoto", color="red")
+            )
+            self._view.update_page()
+            return
+        mailC = self._view.Mail.value
+        if mailC == "":
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione! Il campo mail cliente non può essere vuoto", color="red")
+            )
+            self._view.update_page()
+            return
+        categoriaC = self._view.Categoria.value
+        if categoriaC == "":
+            self._view.lvOut.controls.append(
+                ft.Text("Attenzione! Il campo categoria cliente non può essere vuoto", color="red")
+            )
+            self._view.update_page()
+            return
+
+        self._model.add_cliente(nomeC, mailC, categoriaC)
+        self._view.lvOut.controls.append(
+            ft.Text("Cliente aggiunto correttamente al database.", color="green")
+        )
+        self._view.update_page()
